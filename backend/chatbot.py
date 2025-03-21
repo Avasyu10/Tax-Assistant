@@ -1,7 +1,13 @@
 from huggingface_hub import InferenceClient
 
-# Set up the Hugging Face API key
-HUGGING_FACE_API_KEY = "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"
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get the token
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_TOKEN")
 
 # Initialize the client
 client = InferenceClient(
