@@ -1,7 +1,7 @@
 # Flask framework
 flask
 flask-cors
-
+python-dotenv
 # OCR Extraction
 pytesseract
 opencv-python
