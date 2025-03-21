@@ -6,7 +6,7 @@ import pandas as pd
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
 st.title("💰 AI-Powered Tax Assistant")
-st.markdown("### Simplify Your Tax Calculation & Deductions 🚀")
+st.markdown("### Simplify Your Tax Calculation & Deductions ")
 
 st.markdown("---")
 
