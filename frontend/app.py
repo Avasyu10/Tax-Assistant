@@ -2,6 +2,9 @@ import streamlit as st
 import requests
 import pandas as pd
 
+# Backend Base URL
+BASE_URL = "https://ai-tax-assistant.onrender.com"
+
 st.title("💰 AI-Powered Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions 🚀")
 
@@ -24,7 +27,7 @@ has_loans = st.checkbox("Do you have any loans?")
 has_business_income = st.checkbox("Do you have business income?")
 
 if st.button("📄 Generate Checklist"):
-    response = requests.post("http://127.0.0.1:5000/generate_checklist", json={
+    response = requests.post(f"{BASE_URL}/generate_checklist", json={
         "employment_type": employment_type,
         "has_investments": has_investments,
         "has_loans": has_loans,
@@ -39,14 +42,14 @@ st.markdown("---")
 
 # Tax Calculation Button
 if st.button("📊 Calculate Tax"):
-    response = requests.post("http://127.0.0.1:5000/calculate_tax", json={"income": income})
+    response = requests.post(f"{BASE_URL}/calculate_tax", json={"income": income})
     st.write("### Estimated Tax:", response.json()["estimated_tax"])
 
 st.markdown("---")
 
 # Tax Deduction Prediction Button
 if st.button("📉 Predict Deduction"):
-    response = requests.post("http://127.0.0.1:5000/predict_deduction", json={
+    response = requests.post(f"{BASE_URL}/predict_deduction", json={
         "income": income,
         "investments": investments,
         "medical_expenses": medical_expenses,
@@ -59,7 +62,7 @@ st.markdown("---")
 
 # Audit Risk Assessment Button
 if st.button("⚠️ Check Audit Risk"):
-    response = requests.post("http://127.0.0.1:5000/predict_audit_risk", json={
+    response = requests.post(f"{BASE_URL}/predict_audit_risk", json={
         "income": income,
         "deductions": investments + medical_expenses + loan_interest
     })
@@ -70,7 +73,7 @@ st.markdown("---")
 # **New Feature: Tax Breakdown & Investment Recommendations with Bar Chart**
 st.markdown("## 📊 Tax Breakdown & Investment Advisor")
 if st.button("📜 Get Tax Breakdown & Advice"):
-    response = requests.post("http://127.0.0.1:5000/tax_breakdown", json={
+    response = requests.post(f"{BASE_URL}/tax_breakdown", json={
         "income": income,
         "investments": investments,
         "medical_expenses": medical_expenses,
@@ -105,7 +108,8 @@ st.markdown("---")
 st.markdown("## 🤖 Ask the AI Tax Chatbot")
 question = st.text_input("Enter your tax-related question:")
 if st.button("💬 Get Advice"):
-    response = requests.post("http://127.0.0.1:5000/chatbot", json={"question": question})
+    response = requests.post(f"{BASE_URL}/chatbot", json={"question": question})
     st.write("### Chatbot Response:", response.json()["answer"])
 
 st.markdown("---")
+
