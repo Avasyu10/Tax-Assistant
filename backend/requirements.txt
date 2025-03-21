@@ -1,0 +1,24 @@
+# Flask framework
+flask
+flask-cors
+
+# OCR Extraction
+pytesseract
+opencv-python
+pillow
+
+# Data Processing
+numpy
+pandas
+
+# Machine Learning (if used in deduction, audit risk, etc.)
+scikit-learn
+
+# NLP for Chatbot
+transformers
+torch
+sentence-transformers
+nltk
+
+# Web Requests (if needed for external API calls)
+requests
