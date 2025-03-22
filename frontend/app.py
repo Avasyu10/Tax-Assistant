@@ -91,6 +91,27 @@ if st.button("📜 Get Tax Breakdown & Advice"):
 
 st.markdown("---")
 
+# Important Tax Tips Section
+st.markdown("## 📌 Important Points to Keep in Mind While Filing Taxes")
+st.markdown(
+    """
+    -  **Keep Track of Your Income & Deductions**: Ensure all income sources and eligible deductions are accounted for.
+    -  **Choose the Right Tax Regime**: Compare the old and new tax regimes to see which is beneficial.
+    -  **Save Tax Through Investments**: Consider tax-saving schemes like PPF, ELSS, and NPS.
+    -  **Medical & Insurance Benefits**: Claim deductions for medical expenses and insurance premiums.
+    -  **Loan Interest Deduction**: Home and education loan interest can help reduce taxable income.
+    -  **Dependent Tax Benefits**: Expenses on dependents, including parents and children, may be eligible for deductions.
+    -  **HRA & Rent Allowance**: If living in a rented house, claim HRA benefits.
+    -  **Be Honest in Your Tax Filing**: Over-claiming deductions can increase audit risk.
+    -  **Check Form 16 & Other Documents**: Verify all documents before filing.
+    -  **File Before the Deadline**: Avoid penalties by filing on time.
+    -  **Utilize 80C Deductions Wisely**: Invest in tax-saving instruments to reduce liability.
+    -  **Report All Income Sources**: Ensure part-time jobs, freelancing, or investments are included in your filing.
+    """
+)
+
+st.markdown("---")
+
 # AI Tax Chatbot
 st.markdown("## 🤖 Ask the AI Tax Chatbot")
 question = st.text_input("Enter your tax-related question:")
@@ -99,5 +120,4 @@ if st.button("💬 Get Advice"):
     st.info(f"### Chatbot Response: {response.json()['answer']}")
 
 st.markdown("---")
-
 
