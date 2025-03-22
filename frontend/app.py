@@ -5,7 +5,7 @@ import pandas as pd
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
-st.title("💰 AI-Powered Tax Assistant")
+st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
 
