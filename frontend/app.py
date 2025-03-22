@@ -17,26 +17,6 @@ medical_expenses = st.sidebar.number_input("Medical Expenses", min_value=0, step
 loan_interest = st.sidebar.number_input("Loan Interest Paid", min_value=0, step=1000)
 dependents = st.sidebar.number_input("Number of Dependents", min_value=0, step=1)
 
-st.markdown("## 📝 Generate Tax Document Checklist")
-employment_type = st.selectbox("Select Your Employment Type", ["Salaried", "Self-Employed", "Freelancer", "Business Owner"])
-has_investments = st.checkbox("Do you have tax-saving investments?")
-has_loans = st.checkbox("Do you have any loans?")
-has_business_income = st.checkbox("Do you have business income?")
-
-if st.button("📄 Generate Checklist"):
-    response = requests.post(f"{BASE_URL}/generate_checklist", json={
-        "employment_type": employment_type,
-        "has_investments": has_investments,
-        "has_loans": has_loans,
-        "has_business_income": has_business_income
-    })
-    checklist = response.json()["checklist"]
-    st.write("### Your Tax Document Checklist:")
-    for item in checklist:
-        st.write(f"- {item}")
-
-st.markdown("---")
-
 # Tax Calculation
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -62,6 +42,26 @@ with col3:
             "deductions": investments + medical_expenses + loan_interest
         })
         st.warning(f"### Audit Risk Level: {response.json()['audit_risk']}")
+
+st.markdown("---")
+
+st.markdown("## 📝 Generate Tax Document Checklist")
+employment_type = st.selectbox("Select Your Employment Type", ["Salaried", "Self-Employed", "Freelancer", "Business Owner"])
+has_investments = st.checkbox("Do you have tax-saving investments?")
+has_loans = st.checkbox("Do you have any loans?")
+has_business_income = st.checkbox("Do you have business income?")
+
+if st.button("📄 Generate Checklist"):
+    response = requests.post(f"{BASE_URL}/generate_checklist", json={
+        "employment_type": employment_type,
+        "has_investments": has_investments,
+        "has_loans": has_loans,
+        "has_business_income": has_business_income
+    })
+    checklist = response.json()["checklist"]
+    st.write("### Your Tax Document Checklist:")
+    for item in checklist:
+        st.write(f"- {item}")
 
 st.markdown("---")
 
@@ -99,4 +99,5 @@ if st.button("💬 Get Advice"):
     st.info(f"### Chatbot Response: {response.json()['answer']}")
 
 st.markdown("---")
+
 
