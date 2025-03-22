@@ -96,18 +96,18 @@ st.markdown("## 📌 Important Points to Keep in Mind While Filing Taxes")
 st.markdown(
     """
     <div style="font-size:16px;">
-    - ✅ <b>Keep Track of Your Income & Deductions</b>: Ensure all income sources and eligible deductions are accounted for.<br>
-    - ✅ <b>Choose the Right Tax Regime</b>: Compare the old and new tax regimes to see which is beneficial.<br>
-    - ✅ <b>Save Tax Through Investments</b>: Consider tax-saving schemes like PPF, ELSS, and NPS.<br>
-    - ✅ <b>Medical & Insurance Benefits</b>: Claim deductions for medical expenses and insurance premiums.<br>
-    - ✅ <b>Loan Interest Deduction</b>: Home and education loan interest can help reduce taxable income.<br>
-    - ✅ <b>Dependent Tax Benefits</b>: Expenses on dependents, including parents and children, may be eligible for deductions.<br>
-    - ✅ <b>HRA & Rent Allowance</b>: If living in a rented house, claim HRA benefits.<br>
-    - ✅ <b>Be Honest in Your Tax Filing</b>: Over-claiming deductions can increase audit risk.<br>
-    - ✅ <b>Check Form 16 & Other Documents</b>: Verify all documents before filing.<br>
-    - ✅ <b>File Before the Deadline</b>: Avoid penalties by filing on time.<br>
-    - ✅ <b>Utilize 80C Deductions Wisely</b>: Invest in tax-saving instruments to reduce liability.<br>
-    - ✅ <b>Report All Income Sources</b>: Ensure part-time jobs, freelancing, or investments are included in your filing.<br>
+    -  <b>Keep Track of Your Income & Deductions</b>: Ensure all income sources and eligible deductions are accounted for.<br>
+    -  <b>Choose the Right Tax Regime</b>: Compare the old and new tax regimes to see which is beneficial.<br>
+    -  <b>Save Tax Through Investments</b>: Consider tax-saving schemes like PPF, ELSS, and NPS.<br>
+    -  <b>Medical & Insurance Benefits</b>: Claim deductions for medical expenses and insurance premiums.<br>
+    -  <b>Loan Interest Deduction</b>: Home and education loan interest can help reduce taxable income.<br>
+    -  <b>Dependent Tax Benefits</b>: Expenses on dependents, including parents and children, may be eligible for deductions.<br>
+    -  <b>HRA & Rent Allowance</b>: If living in a rented house, claim HRA benefits.<br>
+    -  <b>Be Honest in Your Tax Filing</b>: Over-claiming deductions can increase audit risk.<br>
+    -  <b>Check Form 16 & Other Documents</b>: Verify all documents before filing.<br>
+    -  <b>File Before the Deadline</b>: Avoid penalties by filing on time.<br>
+    -  <b>Utilize 80C Deductions Wisely</b>: Invest in tax-saving instruments to reduce liability.<br>
+    -  <b>Report All Income Sources</b>: Ensure part-time jobs, freelancing, or investments are included in your filing.<br>
     </div>
     """, unsafe_allow_html=True
 )
