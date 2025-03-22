@@ -5,38 +5,11 @@ import pandas as pd
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
-# Apply Dark Mode Styling
-st.markdown(
-    """
-    <style>
-        body {
-            background-color: #0E1117;
-            color: white;
-        }
-        .stTextInput, .stNumberInput, .stSelectbox, .stCheckbox, .stButton {
-            background-color: #161B22;
-            color: white;
-        }
-        .stButton > button {
-            background-color: #1F6FEB;
-            color: white;
-            border-radius: 8px;
-            padding: 10px;
-            border: none;
-        }
-        .stButton > button:hover {
-            background-color: #3D8BFF;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 st.title("💰 AI-Powered Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
 
-# User Inputs with Sidebar
+# Sidebar for Inputs
 st.sidebar.header("🔢 Enter Your Financial Details")
 income = st.sidebar.number_input("Income", min_value=0, step=1000)
 investments = st.sidebar.number_input("Investments (PPF, ELSS, NPS, etc.)", min_value=0, step=1000)
