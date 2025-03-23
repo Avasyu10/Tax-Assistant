@@ -52,7 +52,7 @@ with col1:
 with col2:
     if st.button("🧾 Switch to General Tax Calculator"):
         st.session_state.mode = "general_tax"
-        st.experimental_rerun()
+        st.rerun()
 st.markdown("---")
 # Capital Gains Tax Section
 if st.session_state.mode == "capital_gains":
