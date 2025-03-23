@@ -48,7 +48,7 @@ col1, col2 = st.columns(2)
 with col1:
     if st.button("📊 Switch to Capital Gains Tax"):
         st.session_state.mode = "capital_gains"
-        st.experimental_rerun()
+        st.rerun()
 with col2:
     if st.button("🧾 Switch to General Tax Calculator"):
         st.session_state.mode = "general_tax"
