@@ -58,17 +58,14 @@ if st.session_state.mode == "capital_gains":
     st.markdown("## 📈 Crypto & Stock Capital Gains Tax Calculator")
     
     if st.button("📊 Calculate Capital Gains Tax"):
-       response = requests.post(
-            f"{BASE_URL}/calculate_capital_gains",
-            json={
+        response = requests.post(f"{BASE_URL}/calculate_capital_gains", json={
                 "num_trades": num_trades,
                 "asset_type": asset_type,
                 "buy_price": buy_price,
                 "sell_price": sell_price,
                 "quantity": quantity,
                 "holding_period": holding_period
-            }
-        )
+        })
         result = response.json()
         
         st.write(f"### 📊 **Capital Gains Summary**")
