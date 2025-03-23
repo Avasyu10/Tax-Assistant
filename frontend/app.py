@@ -12,6 +12,13 @@ st.sidebar.header("📑 Enter Your Financial Details")
 if "mode" not in st.session_state:
     st.session_state.mode = "general_tax"
 
+# Define session state for trades
+if "num_trades" not in st.session_state:
+    st.session_state.num_trades = 1
+if "trades" not in st.session_state:
+    st.session_state.trades = [{} for _ in range(st.session_state.num_trades)]
+
+
 # Sidebar Inputs (Default: General Tax Inputs)
 if st.session_state.mode == "general_tax":
     income = st.sidebar.number_input("Income", min_value=0, step=1000)
@@ -20,23 +27,22 @@ if st.session_state.mode == "general_tax":
     loan_interest = st.sidebar.number_input("Loan Interest Paid", min_value=0, step=1000)
     dependents = st.sidebar.number_input("Number of Dependents", min_value=0, step=1)
 elif st.session_state.mode == "capital_gains":
-    num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=1)
-    trades = []
-    for i in range(num_trades):
+     st.session_state.num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=st.session_state.num_trades)
+    
+    if len(st.session_state.trades) != st.session_state.num_trades:
+        st.session_state.trades = [{} for _ in range(st.session_state.num_trades)]
+    
+    trades = st.session_state.trades
+    
+    for i in range(st.session_state.num_trades):
         st.sidebar.markdown(f"**Trade {i+1}**")
-        asset_type = st.sidebar.selectbox(f"Asset Type - Trade {i+1}", ["Stocks", "Crypto"], key=f"type_{i}")
-        buy_price = st.sidebar.number_input(f"Buy Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"buy_{i}")
-        sell_price = st.sidebar.number_input(f"Sell Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"sell_{i}")
-        quantity = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
-        holding_period = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
-
-        trades.append({
-            "asset_type": asset_type,
-            "buy_price": buy_price,
-            "sell_price": sell_price,
-            "quantity": quantity,
-            "holding_period": holding_period
-        })
+        trades[i]["asset_type"] = st.sidebar.selectbox(f"Asset Type - Trade {i+1}", ["Stocks", "Crypto"], key=f"type_{i}")
+        trades[i]["buy_price"] = st.sidebar.number_input(f"Buy Price (\u20b9) - Trade {i+1}", min_value=0.0, step=0.1, key=f"buy_{i}")
+        trades[i]["sell_price"] = st.sidebar.number_input(f"Sell Price (\u20b9) - Trade {i+1}", min_value=0.0, step=0.1, key=f"sell_{i}")
+        trades[i]["quantity"] = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
+        trades[i]["holding_period"] = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
+    
+    st.session_state.trades = trades
 
 # Title
 st.title("💼 Smart Tax Assistant")
