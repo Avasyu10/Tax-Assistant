@@ -7,6 +7,7 @@ from chatbot import get_tax_advice
 from checklist_generator import generate_checklist
 from tax_breakdown import calculate_tax_breakdown
 from investment_advisor import get_investment_recommendations
+from capital_gains import calculate_capital_gains
 
 app = Flask(__name__)
 
@@ -74,6 +75,14 @@ def generate():
     checklist = generate_checklist(emp_type, has_investments, has_loans, has_business_income)
     return jsonify({"checklist": checklist})
 
+# API Endpoint: Capital Gains Tax Calculation
+@app.route("/calculate_capital_gains", methods=["POST"])
+def capital_gains():
+    data = request.json
+    trades = data.get("trades", [])  # List of trades entered manually
+    result = calculate_capital_gains(trades)
+    return jsonify(result)
+
 # API Endpoint: Tax Breakdown & Investment Recommendations
 @app.route("/tax_breakdown", methods=["POST"])
 def tax_breakdown():
@@ -97,4 +106,4 @@ def tax_breakdown():
     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    app.run(debug=True)
