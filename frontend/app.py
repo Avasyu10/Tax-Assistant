@@ -29,12 +29,12 @@ if st.session_state.mode == "general_tax":
 elif st.session_state.mode == "capital_gains":
      st.session_state.num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=st.session_state.num_trades)
     
-    if len(st.session_state.trades) != st.session_state.num_trades:
-        st.session_state.trades = [{} for _ in range(st.session_state.num_trades)]
+     if len(st.session_state.trades) != st.session_state.num_trades:
+         st.session_state.trades = [{} for _ in range(st.session_state.num_trades)]
     
-    trades = st.session_state.trades
+     trades = st.session_state.trades
     
-    for i in range(st.session_state.num_trades):
+     for i in range(st.session_state.num_trades):
         st.sidebar.markdown(f"**Trade {i+1}**")
         trades[i]["asset_type"] = st.sidebar.selectbox(f"Asset Type - Trade {i+1}", ["Stocks", "Crypto"], key=f"type_{i}")
         trades[i]["buy_price"] = st.sidebar.number_input(f"Buy Price (\u20b9) - Trade {i+1}", min_value=0.0, step=0.1, key=f"buy_{i}")
@@ -42,7 +42,7 @@ elif st.session_state.mode == "capital_gains":
         trades[i]["quantity"] = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
         trades[i]["holding_period"] = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
     
-    st.session_state.trades = trades
+     st.session_state.trades = trades
 
 # Title
 st.title("💼 Smart Tax Assistant")
