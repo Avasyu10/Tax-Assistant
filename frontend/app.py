@@ -5,46 +5,108 @@ import pandas as pd
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
+# Sidebar: Dynamic Input Fields
+st.sidebar.header("📑 Enter Your Financial Details")
+
+# Define session state for mode switching
+if "mode" not in st.session_state:
+    st.session_state.mode = "general_tax"
+
+# Sidebar Inputs (Default: General Tax Inputs)
+if st.session_state.mode == "general_tax":
+    income = st.sidebar.number_input("Income", min_value=0, step=1000)
+    investments = st.sidebar.number_input("Investments (PPF, ELSS, NPS, etc.)", min_value=0, step=1000)
+    medical_expenses = st.sidebar.number_input("Medical Expenses", min_value=0, step=1000)
+    loan_interest = st.sidebar.number_input("Loan Interest Paid", min_value=0, step=1000)
+    dependents = st.sidebar.number_input("Number of Dependents", min_value=0, step=1)
+elif st.session_state.mode == "capital_gains":
+    num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=1)
+    trades = []
+    for i in range(num_trades):
+        st.sidebar.markdown(f"**Trade {i+1}**")
+        asset_type = st.sidebar.selectbox(f"Asset Type - Trade {i+1}", ["Stocks", "Crypto"], key=f"type_{i}")
+        buy_price = st.sidebar.number_input(f"Buy Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"buy_{i}")
+        sell_price = st.sidebar.number_input(f"Sell Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"sell_{i}")
+        quantity = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
+        holding_period = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
+
+        trades.append({
+            "asset_type": asset_type,
+            "buy_price": buy_price,
+            "sell_price": sell_price,
+            "quantity": quantity,
+            "holding_period": holding_period
+        })
+
+# Title
 st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
 
-# Sidebar for Inputs
-st.sidebar.header("🔢 Enter Your Financial Details")
-income = st.sidebar.number_input("Income", min_value=0, step=1000)
-investments = st.sidebar.number_input("Investments (PPF, ELSS, NPS, etc.)", min_value=0, step=1000)
-medical_expenses = st.sidebar.number_input("Medical Expenses", min_value=0, step=1000)
-loan_interest = st.sidebar.number_input("Loan Interest Paid", min_value=0, step=1000)
-dependents = st.sidebar.number_input("Number of Dependents", min_value=0, step=1)
-
-# Tax Calculation
-col1, col2, col3 = st.columns(3)
+# Mode Switching Buttons
+col1, col2 = st.columns(2)
 with col1:
-    if st.button("📊 Calculate Tax"):
-        response = requests.post(f"{BASE_URL}/calculate_tax", json={"income": income})
-        st.success(f"### Estimated Tax: {response.json()['estimated_tax']}")
-
+    if st.button("📊 Switch to Capital Gains Tax"):
+        st.session_state.mode = "capital_gains"
+        st.experimental_rerun()
 with col2:
-    if st.button("📉 Predict Deduction"):
-        response = requests.post(f"{BASE_URL}/predict_deduction", json={
-            "income": income,
-            "investments": investments,
-            "medical_expenses": medical_expenses,
-            "loan_interest": loan_interest,
-            "dependents": dependents
-        })
-        st.success(f"### Predicted Deduction: {response.json()['predicted_deduction']}")
-
-with col3:
-    if st.button("⚠️ Check Audit Risk"):
-        response = requests.post(f"{BASE_URL}/predict_audit_risk", json={
-            "income": income,
-            "deductions": investments + medical_expenses + loan_interest
-        })
-        st.warning(f"### Audit Risk Level: {response.json()['audit_risk']}")
-
+    if st.button("🧾 Switch to General Tax Calculator"):
+        st.session_state.mode = "general_tax"
+        st.experimental_rerun()
 st.markdown("---")
+# Capital Gains Tax Section
+if st.session_state.mode == "capital_gains":
+    st.markdown("## 📈 Crypto & Stock Capital Gains Tax Calculator")
+    
+    if st.button("📊 Calculate Capital Gains Tax"):
+        response = requests.post(f"{BASE_URL}/calculate_capital_gains", json={"trades": trades})
+        result = response.json()
+        
+        st.write(f"### 📊 **Capital Gains Summary**")
+        st.write(f"**Short-Term Capital Gains (Stocks)**: ₹{result['short_term_gains_stocks']}")
+        st.write(f"**Long-Term Capital Gains (Stocks)**: ₹{result['long_term_gains_stocks']}")
+        st.write(f"**Crypto Gains**: ₹{result['crypto_gains']}")
 
+        st.write("---")
+        st.write(f"### 💰 **Tax Breakdown**")
+        st.write(f"📌 **STCG Tax on Stocks (15%)**: ₹{result['stcg_stocks_tax']}")
+        st.write(f"📌 **LTCG Tax on Stocks (10% after ₹1,00,000 exemption)**: ₹{result['ltcg_stocks_tax']}")
+        st.write(f"📌 **Crypto Tax (30%)**: ₹{result['crypto_tax']}")
+
+    st.markdown("---")
+
+# General Tax Calculation Section
+if st.session_state.mode == "general_tax":
+    st.markdown("## 📊 Tax Calculation & Deductions")
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        if st.button("📊 Calculate Tax"):
+            response = requests.post(f"{BASE_URL}/calculate_tax", json={"income": income})
+            st.success(f"### Estimated Tax: ₹{response.json()['estimated_tax']}")
+
+    with col2:
+        if st.button("📉 Predict Deduction"):
+            response = requests.post(f"{BASE_URL}/predict_deduction", json={
+                "income": income,
+                "investments": investments,
+                "medical_expenses": medical_expenses,
+                "loan_interest": loan_interest,
+                "dependents": dependents
+            })
+            st.success(f"### Predicted Deduction: ₹{response.json()['predicted_deduction']}")
+
+    with col3:
+        if st.button("⚠️ Check Audit Risk"):
+            response = requests.post(f"{BASE_URL}/predict_audit_risk", json={
+                "income": income,
+                "deductions": investments + medical_expenses + loan_interest
+            })
+            st.warning(f"### Audit Risk Level: {response.json()['audit_risk']}")
+
+    st.markdown("---")
+
+# Tax Document Checklist
 st.markdown("## 📝 Generate Tax Document Checklist")
 employment_type = st.selectbox("Select Your Employment Type", ["Salaried", "Self-Employed", "Freelancer", "Business Owner"])
 has_investments = st.checkbox("Do you have tax-saving investments?")
@@ -79,12 +141,12 @@ if st.button("📜 Get Tax Breakdown & Advice"):
     breakdown = result["breakdown"]
     savings = result["potential_savings"]
     recommendations = result["recommendations"]
-    
+
     df = pd.DataFrame(list(breakdown.items()), columns=["Category", "Amount"])
     st.bar_chart(df.set_index("Category"))
-    
-    st.write(f"💰 **Potential Tax Savings:** {savings}")
-    
+
+    st.write(f"💰 **Potential Tax Savings:** ₹{savings}")
+
     st.write("### 📌 Investment Recommendations:")
     for rec in recommendations:
         st.write(f"- {rec}")
@@ -113,6 +175,7 @@ st.markdown(
 )
 
 st.markdown("---")
+
 
 # AI Tax Chatbot
 st.markdown("## 🤖 Ask the AI Tax Chatbot")
