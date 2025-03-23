@@ -21,9 +21,13 @@ if st.session_state.mode == "general_tax":
     dependents = st.sidebar.number_input("Number of Dependents", min_value=0, step=1)
 elif st.session_state.mode == "capital_gains":
     num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=1)
-    
+
+    # Initialize variables
+    total_short_term_stocks = 0
+    total_long_term_stocks = 0
+    total_crypto_gains = 0
+
     for i in range(num_trades):
-        trades = []
         st.sidebar.markdown(f"**Trade {i+1}**")
         asset_type = st.sidebar.selectbox(f"Asset Type - Trade {i+1}", ["Stocks", "Crypto"], key=f"type_{i}")
         buy_price = st.sidebar.number_input(f"Buy Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"buy_{i}")
@@ -31,13 +35,7 @@ elif st.session_state.mode == "capital_gains":
         quantity = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
         holding_period = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
 
-        trades.append({
-            "asset_type": asset_type,
-            "buy_price": float(buy_price),   # Explicitly convert to float
-            "sell_price": float(sell_price),
-            "quantity": int(quantity),       # Convert to integer
-            "holding_period": int(holding_period)  
-        })
+        
 
 # Title
 st.title("💼 Smart Tax Assistant")
@@ -60,7 +58,17 @@ if st.session_state.mode == "capital_gains":
     st.markdown("## 📈 Crypto & Stock Capital Gains Tax Calculator")
     
     if st.button("📊 Calculate Capital Gains Tax"):
-        response = requests.post(f"{BASE_URL}/calculate_capital_gains", json={"trades": trades})
+       response = requests.post(
+            f"{BASE_URL}/calculate_capital_gains",
+            json={
+                "num_trades": num_trades,
+                "asset_type": asset_type,
+                "buy_price": buy_price,
+                "sell_price": sell_price,
+                "quantity": quantity,
+                "holding_period": holding_period
+            }
+        )
         result = response.json()
         
         st.write(f"### 📊 **Capital Gains Summary**")
