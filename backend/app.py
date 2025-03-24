@@ -79,6 +79,7 @@ def generate():
 @app.route("/calculate_capital_gains", methods=["POST"])
 def capital_gains():
     data = request.json
+    
 
     # Extract values, defaulting to 0 if not provided
     num_trades = data.get("num_trades", 0)
@@ -91,8 +92,8 @@ def capital_gains():
     # Calculate capital gains
     result = calculate_capital_gains(asset_type, buy_price, sell_price, quantity, holding_period)
     
+    
     return jsonify(result)
-
 
 # API Endpoint: Tax Breakdown & Investment Recommendations
 @app.route("/tax_breakdown", methods=["POST"])
