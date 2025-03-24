@@ -68,13 +68,13 @@ if st.session_state.mode == "capital_gains":
         })
         result = response.json()
         
-        st.write(f"### 📊 **Capital Gains Summary**")
+        st.write(f"###  **Capital Gains Summary**")
         st.write(f"**Short-Term Capital Gains (Stocks)**: ₹{result['short_term_gains_stocks']}")
         st.write(f"**Long-Term Capital Gains (Stocks)**: ₹{result['long_term_gains_stocks']}")
         st.write(f"**Crypto Gains**: ₹{result['crypto_gains']}")
 
         st.write("---")
-        st.write(f"### 💰 **Tax Breakdown**")
+        st.write(f"###  **Tax Breakdown**")
         st.write(f"📌 **STCG Tax on Stocks (15%)**: ₹{result['stcg_stocks_tax']}")
         st.write(f"📌 **LTCG Tax on Stocks (10% after ₹1,00,000 exemption)**: ₹{result['ltcg_stocks_tax']}")
         st.write(f"📌 **Crypto Tax (30%)**: ₹{result['crypto_tax']}")
@@ -191,6 +191,8 @@ if st.button("💬 Get Advice"):
     st.info(f"### Chatbot Response: {response.json()['answer']}")
 
 st.markdown("---")
+
+
 
 
 
