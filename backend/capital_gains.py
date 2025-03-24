@@ -1,18 +1,19 @@
 def calculate_capital_gains(asset_type, buy_price, sell_price, quantity, holding_period):
+    exemption_limit = 100000  # Exemption for LTCG on stocks (Section 112A)
+    
+    profit = (sell_price - buy_price) * quantity
+
     total_short_term_stocks = 0
     total_long_term_stocks = 0
     total_crypto_gains = 0
-    exemption_limit = 100000  # Exemption for LTCG on stocks (Section 112A)
 
-    profit = (sell_price - buy_price) * quantity
-
-    if asset_type == "stocks":
+    if asset_type.lower() == "stocks":
         if holding_period <= 365:
-            total_short_term_stocks += profit
+            total_short_term_stocks = profit
         else:
-            total_long_term_stocks += profit
-    elif asset_type == "crypto":
-        total_crypto_gains += profit  # All crypto gains are taxed at 30%
+            total_long_term_stocks = profit
+    elif asset_type.lower() == "crypto":
+        total_crypto_gains = profit  # All crypto gains are taxed at 30%
 
     # Tax calculations
     stcg_stocks_tax = total_short_term_stocks * 0.15  # STCG for stocks at 15%
@@ -27,4 +28,7 @@ def calculate_capital_gains(asset_type, buy_price, sell_price, quantity, holding
         "ltcg_stocks_tax": ltcg_stocks_tax,
         "crypto_tax": crypto_tax
     }
+
+
+
 
