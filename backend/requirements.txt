@@ -10,6 +10,7 @@ pillow
 # Data Processing
 numpy
 pandas
+matplotlib
 
 # Machine Learning (if used in deduction, audit risk, etc.)
 scikit-learn
