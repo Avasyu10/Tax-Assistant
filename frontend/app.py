@@ -1,27 +1,6 @@
 import streamlit as st
 import requests
 import pandas as pd
-st.markdown(
-    """
-    <style>
-        body {
-            background-color: #101820;
-            color: #cda34f;
-        }
-        .stApp {
-            background-color: #101820;
-        }
-        .stSidebar {
-            background-color: #121212 !important;
-        }
-        h1, h2, h3, h4, h5, h6, p, label {
-            color: #cda34f !important;
-            font-family: 'sans';
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
