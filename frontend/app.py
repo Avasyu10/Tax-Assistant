@@ -1,7 +1,16 @@
 import streamlit as st
 import requests
 import pandas as pd
-import pyplot as plt
+import os
+import subprocess
+import sys
+
+# Install matplotlib if not already installed
+try:
+    import matplotlib.pyplot as plt
+except ModuleNotFoundError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "matplotlib"])
+    import matplotlib.pyplot as plt  # Retry import
 
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
