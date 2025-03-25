@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
