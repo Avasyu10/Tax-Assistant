@@ -1,9 +1,11 @@
 import streamlit as st
 import requests
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
+
 
 # Sidebar: Dynamic Input Fields
 st.sidebar.header("📑 Enter Your Financial Details")
@@ -34,25 +36,129 @@ elif st.session_state.mode == "capital_gains":
         sell_price = st.sidebar.number_input(f"Sell Price (₹) - Trade {i+1}", min_value=0.0, step=0.1, key=f"sell_{i}")
         quantity = st.sidebar.number_input(f"Quantity - Trade {i+1}", min_value=1, step=1, key=f"qty_{i}")
         holding_period = st.sidebar.number_input(f"Holding Period (Days) - Trade {i+1}", min_value=1, step=1, key=f"hold_{i}")
+elif st.session_state.mode == "hra_calculator":
+    basic_salary = st.sidebar.number_input("Basic Salary (₹)", min_value=0, step=1000)
+    hra_received = st.sidebar.number_input("HRA Received (₹)", min_value=0, step=1000)
+    rent_paid = st.sidebar.number_input("Rent Paid (₹)", min_value=0, step=1000)
+    metro_city = st.sidebar.selectbox("City Type", ["Metro", "Non-Metro"])
+    metro_city_bool = True if metro_city == "Metro" else False
+elif st.session_state.mode == "loan_calculator":
+    loan_amount = st.sidebar.number_input("Loan Amount (₹)", min_value=10000, step=10000)
+    annual_rate = st.sidebar.number_input("Annual Interest Rate (%)", min_value=1.0, step=0.1)
+    tenure_years = st.sidebar.number_input("Loan Tenure (Years)", min_value=1, step=1)
 
         
-
 # Title
 st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
 
 # Mode Switching Buttons
-col1, col2 = st.columns(2)
+col1, col2, col3, col4 = st.columns(4)
+
 with col1:
     if st.button("📊 Switch to Capital Gains Tax"):
         st.session_state.mode = "capital_gains"
         st.rerun()
+
 with col2:
-    if st.button("🧾 Switch to General Tax Calculator"):
+    if st.button("🧾 Switch to General Tax"):
         st.session_state.mode = "general_tax"
         st.rerun()
+
+with col3:
+    if st.button("🏠 Switch to HRA Calculator"):
+        st.session_state.mode = "hra_calculator"
+        st.rerun()
+
+with col4:
+    if st.button("🏡 Switch to Loan EMI Calculator"):
+        st.session_state.mode = "loan_calculator"
+        st.rerun()
+
+# HRA Calculation Section
+
+# Loan EMI Calculation
+if st.session_state.mode == "loan_calculator":
+    st.markdown("---")
+    st.markdown("## 🏡 Loan EMI Calculator")
+    
+     # ℹ️ About EMI & Tax Benefits
+    with st.expander("ℹ️ Understanding EMI, Tax Benefits & Loan Rules in India"):
+        st.write("""
+        - **EMI (Equated Monthly Installment)** is a fixed monthly payment towards your loan.
+        - EMI consists of **Principal + Interest**, with higher interest payments in the early months.
+        - **Tax Benefits in India**:
+          - 🏠 **Home Loan**:
+            - Up to ₹2,00,000 deduction on interest under **Section 24(b)** (Self-occupied property).
+            - Principal repayment eligible under **Section 80C** (Max ₹1,50,000).
+          - 🎓 **Education Loan**:
+            - **Unlimited deduction** on interest under **Section 80E** (Valid for 8 years).
+          - 🚗 **Car Loan**: No tax benefits for personal cars, but deduction available for business use.
+        - **EMI Calculation Formula**:  
+          - EMI = **[P × r × (1+r)^n] / [(1+r)^n - 1]**  
+          - Where **P** = Loan Amount, **r** = Monthly Interest Rate, **n** = Loan Tenure (Months)
+        """)
+
+    if st.button("📉 Calculate EMI"):
+        response = requests.post(f"{BASE_URL}/calculate_loan", json={
+            "loan_amount": loan_amount,
+            "annual_rate": annual_rate,
+            "tenure_years": tenure_years
+        })
+        result = response.json()
+
+        if "error" in result:
+            st.error(result["error"])
+        else:
+            st.success(f"### EMI Details")
+            st.write(f"**Monthly EMI**: ₹{result['emi']}")
+            st.write(f"**Total Interest Paid**: ₹{result['total_interest']}")
+            st.write(f"**Total Payment (Principal + Interest)**: ₹{result['total_payment']}")
+            st.write(f"**Eligible Tax Deduction on Interest**: ₹{result['tax_deduction']}")
+
+            # Plot Graph - Principal & Interest Over Time
+            st.markdown("### Loan Amortization Schedule")
+            df = pd.DataFrame(result["amortization"])
+
+            fig, ax = plt.subplots(figsize=(10, 5))
+            ax.plot(df["Month"], df["Principal"], label="Principal Paid", color="blue")
+            ax.plot(df["Month"], df["Interest"], label="Interest Paid", color="red")
+            ax.fill_between(df["Month"], df["Principal"], df["Interest"], color="gray", alpha=0.2)
+            ax.set_xlabel("Months")
+            ax.set_ylabel("Amount (₹)")
+            ax.set_title("Principal & Interest Breakdown Over Time")
+            ax.legend()
+            st.pyplot(fig)
+
 st.markdown("---")
+
+if st.session_state.mode == "hra_calculator":
+    st.markdown("---")
+    st.markdown("## 🏠 HRA Exemption Calculator")
+    st.write("House Rent Allowance (HRA) is an important tax benefit for salaried employees who live in rented accommodation. The exempted portion of HRA is calculated based on the following three conditions, and the least of these is exempted from tax:")
+    st.write("1. **50% of Basic Salary for Metro Cities (40% for Non-Metro Cities)**")
+    st.write("2. **Actual HRA Received from Employer**")
+    st.write("3. **Rent Paid minus 10% of Basic Salary**")
+    
+    if st.button("🏠 Calculate HRA Exemption"):
+        response = requests.post(f"{BASE_URL}/calculate_hra", json={
+            "basic_salary": basic_salary,
+            "hra_received": hra_received,
+            "rent_paid": rent_paid,
+            "metro_city": metro_city_bool
+        })
+        result = response.json()
+        st.write(f"### **HRA Exemption Details**")
+        st.write(f"**Exempted HRA**: ₹{result['hra_exempted']}")
+        st.write(f"**Taxable HRA**: ₹{result['hra_taxable']}")
+        
+        st.write("#### Explanation:")
+        st.write(f"- **50% of Basic Salary (Metro) / 40% (Non-Metro)**: ₹{result['metro_or_non_metro_limit']}")
+        st.write(f"- **Actual HRA Received**: ₹{hra_received}")
+        st.write(f"- **Rent Paid - 10% of Basic Salary**: ₹{result['rent_minus_10_percent']}")
+        st.write("The lowest of these values is taken as the exempted HRA, and the remaining portion is taxable.")
+
 # Capital Gains Tax Section
 if st.session_state.mode == "capital_gains":
     st.markdown("## 📈 Crypto & Stock Capital Gains Tax Calculator")
@@ -191,6 +297,9 @@ if st.button("💬 Get Advice"):
     st.info(f"### Chatbot Response: {response.json()['answer']}")
 
 st.markdown("---")
+
+
+
 
 
 
