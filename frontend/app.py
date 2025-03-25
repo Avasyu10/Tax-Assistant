@@ -134,7 +134,7 @@ if st.session_state.mode == "loan_calculator":
 st.markdown("---")
 
 if st.session_state.mode == "hra_calculator":
-    st.markdown("---")
+    
     st.markdown("## 🏠 HRA Exemption Calculator")
     st.write("House Rent Allowance (HRA) is an important tax benefit for salaried employees who live in rented accommodation. The exempted portion of HRA is calculated based on the following three conditions, and the least of these is exempted from tax:")
     st.write("1. **50% of Basic Salary for Metro Cities (40% for Non-Metro Cities)**")
@@ -142,6 +142,7 @@ if st.session_state.mode == "hra_calculator":
     st.write("3. **Rent Paid minus 10% of Basic Salary**")
     
     if st.button("🏠 Calculate HRA Exemption"):
+        st.markdown("---")
         response = requests.post(f"{BASE_URL}/calculate_hra", json={
             "basic_salary": basic_salary,
             "hra_received": hra_received,
