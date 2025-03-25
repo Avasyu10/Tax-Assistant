@@ -8,6 +8,8 @@ from checklist_generator import generate_checklist
 from tax_breakdown import calculate_tax_breakdown
 from investment_advisor import get_investment_recommendations
 from capital_gains import calculate_capital_gains
+from hra_calculator import calculate_hra
+from loan_utils import calculate_emi
 
 app = Flask(__name__)
 
@@ -94,6 +96,32 @@ def capital_gains():
     
     
     return jsonify(result)
+
+@app.route("/calculate_hra", methods=["POST"])
+def hra_calculator():
+    data = request.json
+
+    salary = float(data["basic_salary"])
+    hra_received = float(data["hra_received"])
+    rent_paid = float(data["rent_paid"])
+    metro_city = (data["metro_city"])  # True for Metro, False for Non-Metro
+
+    hra_result = calculate_hra(salary, hra_received, rent_paid, metro_city)
+
+    return jsonify(hra_result)
+
+
+@app.route("/calculate_loan", methods=["POST"])
+def loan_calculator():
+    data = request.json
+    loan_amount = float(data["loan_amount"])
+    annual_rate = float(data["annual_rate"])
+    tenure_years = int(data["tenure_years"])
+
+    result = calculate_emi(loan_amount, annual_rate, tenure_years)
+    return jsonify(result)
+
+
 
 # API Endpoint: Tax Breakdown & Investment Recommendations
 @app.route("/tax_breakdown", methods=["POST"])
