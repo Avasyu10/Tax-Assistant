@@ -1,6 +1,32 @@
 import streamlit as st
 import requests
 import pandas as pd
+st.markdown(
+    """
+    <style>
+        body {
+            background-color: #101820;
+            color: #cda34f;
+            font-family: sans;
+        }
+        .stApp {
+            background-color: #101820;
+        }
+        .stButton>button {
+            background-color: #cda34f;
+            color: #101820;
+            font-weight: bold;
+            border-radius: 8px;
+            border: 2px solid #cda34f;
+        }
+        .stButton>button:hover {
+            background-color: #d4af37;
+            color: #000000;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # Backend Base URL
