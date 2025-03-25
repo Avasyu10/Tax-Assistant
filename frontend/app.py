@@ -159,6 +159,7 @@ if st.session_state.mode == "hra_calculator":
         st.write(f"- **Actual HRA Received**: ₹{hra_received}")
         st.write(f"- **Rent Paid - 10% of Basic Salary**: ₹{result['rent_minus_10_percent']}")
         st.write("The lowest of these values is taken as the exempted HRA, and the remaining portion is taxable.")
+    st.markdown("---")
 
 # Capital Gains Tax Section
 if st.session_state.mode == "capital_gains":
