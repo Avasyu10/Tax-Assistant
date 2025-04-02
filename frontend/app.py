@@ -240,6 +240,76 @@ if st.button("📄 Generate Checklist"):
         st.write(f"- {item}")
 
 st.markdown("---")
+# Expense Split Section
+
+st.markdown("## ⚖️ Income & Expense Balance")
+
+# Button to enable expense entry
+if "enter_expenses" not in st.session_state:
+    st.session_state.enter_expenses = False
+
+if st.button("➕ Enter Expenses"):
+    st.session_state.enter_expenses = True
+
+# Expense entry fields (visible after button click)
+if st.session_state.enter_expenses:
+    st.markdown("### 📌 Enter Your Expenses")
+    st.markdown("Enter income on the sidebar and enter your expenses below.")
+    
+    rent = st.number_input("🏠 Rent", min_value=0, step=1000)
+    groceries = st.number_input("🛒 Groceries", min_value=0, step=500)
+    utilities = st.number_input("💡 Utilities", min_value=0, step=500)
+    transportation = st.number_input("🚗 Transportation", min_value=0, step=500)
+    entertainment = st.number_input("🎭 Entertainment", min_value=0, step=500)
+    other_expenses = st.number_input("📑 Other Expenses", min_value=0, step=500)
+
+    total_expenses = rent + groceries + utilities + transportation + entertainment + other_expenses
+    remaining_income = income - total_expenses
+
+    # Button to finalize and show results
+    if st.button("📊 Split & Analyze"):
+        st.success(f"### Total Expenses: ₹{total_expenses}")
+        st.info(f"### Remaining Income: ₹{remaining_income}")
+
+        if remaining_income < 0:
+            st.error("⚠️ Warning: Expenses exceed income! Consider adjusting your budget.")
+
+        # Pie Chart Visualization
+        st.markdown("## 📊 Expense Breakdown")
+        labels = ["Rent", "Groceries", "Utilities", "Transportation", "Entertainment", "Other"]
+        values = [rent, groceries, utilities, transportation, entertainment, other_expenses]
+        colors = ["red", "green", "blue", "orange", "purple", "gray"]
+        
+        fig, ax = plt.subplots()
+        wedges, texts, autotexts = ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
+        ax.axis('equal')  # Ensures pie is a circle
+        
+        
+        st.pyplot(fig)
+        
+        # Recommendations Based on Spending
+        st.markdown("## 🔍 Smart Financial Recommendations")
+        recs = []
+        if rent > (0.3 * income):
+            recs.append("📌 Consider reducing rent or finding a more affordable option (should ideally be <30% of income).")
+        if groceries > (0.2 * income):
+            recs.append("📌 Look for discounts, meal planning, or alternative grocery options to cut costs.")
+        if utilities > (0.1 * income):
+            recs.append("📌 Try to save on electricity and water bills by using energy-efficient appliances.")
+        if transportation > (0.15 * income):
+            recs.append("📌 Consider carpooling or using public transport to cut transportation costs.")
+        if entertainment > (0.1 * income):
+            recs.append("📌 Consider budgeting entertainment expenses to free up more savings.")
+        if other_expenses > (0.1 * income):
+            recs.append("📌 Review miscellaneous expenses to find potential savings opportunities.")
+        if remaining_income > 0:
+            recs.append("📌 Consider investing a portion of your remaining income for better financial growth.")
+        elif remaining_income < 0:
+            recs.append("📌 Your expenses exceed income! Re-evaluate your spending habits.")
+
+        for r in recs:
+            st.write(r)
+st.markdown("---")
 
 # Tax Breakdown & Investment Advisor
 st.markdown("## 📊 Tax Breakdown & Investment Advisor")
