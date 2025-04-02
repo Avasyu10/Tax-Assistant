@@ -288,7 +288,7 @@ if st.session_state.enter_expenses:
         st.pyplot(fig)
         
         # Recommendations Based on Spending
-        st.markdown("## 🔍 Smart Financial Recommendations")
+        st.markdown("## Smart Financial Recommendations")
         recs = []
         if rent > (0.3 * income):
             recs.append("📌 Consider reducing rent or finding a more affordable option (should ideally be <30% of income).")
