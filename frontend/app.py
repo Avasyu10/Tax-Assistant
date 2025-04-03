@@ -359,6 +359,44 @@ st.markdown(
 )
 
 st.markdown("---")
+# Tax Resources & Guides Section
+st.markdown("## 🌐 Important Tax Resources & Guides")
+st.markdown("Here are some essential links to help you understand and file your taxes effectively:")
+st.markdown("\n")
+st.markdown("\n")
+
+space1, col1, space2, col2, space3 = st.columns([0.1, 1, 0.1, 1, 0.1])
+
+with col1:
+    st.markdown("### 📌 Government Tax Portals")
+    st.markdown("- **Income Tax Department:** [Visit Here](https://www.incometaxindia.gov.in/)")
+    st.markdown("- **GST Portal:** [Visit Here](https://www.gst.gov.in/)")
+    st.markdown("\n")
+    st.markdown("\n")
+    st.markdown("\n")
+    st.markdown("\n")
+    
+    
+    st.markdown("### 📌 Latest Financial News & Updates")
+    st.markdown("- **Union Budget Highlights:** [Read Here](https://www.indiabudget.gov.in/)")
+    st.markdown("- **Latest Tax Amendments:** [Check Here](https://cleartax.in/s/income-tax)")
+    st.markdown("- **Economic Survey Reports:** [Explore Here](https://www.indiabudget.gov.in/economicsurvey/)")
+    
+
+
+with col2:
+    st.markdown("### 📌 Filing & Help Guides")
+    st.markdown("- **How to File Income Tax Returns:** [Read Here](https://cleartax.in/s/how-to-efile-itr)")
+    st.markdown("- **Documents Required for Filing Taxes:** [View Here](https://cleartax.in/s/documents-required-for-income-tax-return-filing)")
+    st.markdown("\n")
+    
+    
+    st.markdown("### 📌 Investment & Tax Saving")
+    st.markdown("- **80C Deductions Explained:** [Learn More](https://cleartax.in/s/80c-80-deductions)")
+    st.markdown("- **Best Tax-Saving Investments:** [Check Here](https://tax2win.in/guide/tax-saving-investments)")
+    st.markdown("- **Capital Gains Tax on Stocks:** [Read Here](https://cleartax.in/s/capital-gains-income)")
+
+st.markdown("---")
 
 
 # AI Tax Chatbot
