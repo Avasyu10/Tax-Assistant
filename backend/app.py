@@ -10,17 +10,24 @@ from investment_advisor import get_investment_recommendations
 from capital_gains import calculate_capital_gains
 from hra_calculator import calculate_hra
 from loan_utils import calculate_emi
+from transaction_analyzer import analyze_transactions
+import pandas as pd
+
 
 app = Flask(__name__)
 
-# API Endpoint: Upload receipt image for OCR
-@app.route("/upload_receipt", methods=["POST"])
-def upload_receipt():
-    file = request.files["file"]
-    file_path = f"uploads/{file.filename}"
-    file.save(file_path)
-    expenses = extract_expenses(file_path)
-    return jsonify({"expenses": expenses})
+# API Endpoint: Upload Bank Transaction CSV
+@app.route("/upload_transactions", methods=["POST"])
+def upload_transactions():
+    transactions = request.json["transactions"]
+    df = pd.DataFrame(transactions)
+
+    summary_table = analyze_transactions(df)
+
+    result_json = summary_table.reset_index().to_dict(orient="records")
+
+    return jsonify({"summary": result_json})
+
 
 # API Endpoint: Predict tax deductions
 @app.route("/predict_deduction", methods=["POST"])
