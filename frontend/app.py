@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 # Backend Base URL
@@ -309,6 +310,37 @@ if st.session_state.enter_expenses:
 
         for r in recs:
             st.write(r)
+st.markdown("---")
+
+
+
+st.markdown("## 🔗 UPI-Based Financial Summary")
+st.markdown("Upload your UPI transaction statement (CSV format) to categorize your income and expenses.")
+
+uploaded_statement = st.file_uploader("📂 Upload UPI Transaction CSV", type=["csv"])
+
+if uploaded_statement:
+    st.success("✅ File Uploaded Successfully!")
+
+    # Read CSV as DataFrame
+    df = pd.read_csv(uploaded_statement)
+
+    # Convert DataFrame to JSON format for API
+    transactions_json = df.to_dict(orient="records")
+
+    # Send data to backend API for processing
+    response = requests.post(f"{BASE_URL}/upload_transactions", json={"transactions": transactions_json})
+
+    if response.status_code == 200:
+        result = response.json()
+        summary_table = pd.DataFrame(result["summary"])
+
+        st.write("### 📊 Monthly Breakdown")
+        st.dataframe(summary_table.style.format({col: "₹{:.2f}" for col in summary_table.select_dtypes(include=[np.number]).columns}))
+
+    else:
+        st.error("❌ Failed to analyze transactions. Please check the file format and try again.")
+
 st.markdown("---")
 
 # Tax Breakdown & Investment Advisor
