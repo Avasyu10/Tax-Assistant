@@ -363,7 +363,7 @@ st.markdown("---")
 st.markdown("## 🌐 Important Tax Resources & Guides")
 st.markdown("Here are some essential links to help you understand and file your taxes effectively:")
 st.markdown("\n")
-st.markdown("\n")
+
 
 space1, col1, space2, col2, space3 = st.columns([0.1, 1, 0.1, 1, 0.1])
 
