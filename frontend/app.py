@@ -255,8 +255,10 @@ if st.button("➕ Enter Expenses"):
 # Expense entry fields (visible after button click)
 if st.session_state.enter_expenses:
     st.markdown("### 📌 Enter Your Expenses")
-    st.markdown("Enter income on the sidebar and enter your expenses below.")
+    st.markdown("Enter salary and your expenses below.")
+
     
+    salary = st.number_input("Salary", min_value=0, step=10000)
     rent = st.number_input("🏠 Rent", min_value=0, step=1000)
     groceries = st.number_input("🛒 Groceries", min_value=0, step=500)
     utilities = st.number_input("💡 Utilities", min_value=0, step=500)
@@ -265,7 +267,7 @@ if st.session_state.enter_expenses:
     other_expenses = st.number_input("📑 Other Expenses", min_value=0, step=500)
 
     total_expenses = rent + groceries + utilities + transportation + entertainment + other_expenses
-    remaining_income = income - total_expenses
+    remaining_income = salary - total_expenses
 
     # Button to finalize and show results
     if st.button("📊 Split & Analyze"):
@@ -291,17 +293,17 @@ if st.session_state.enter_expenses:
         # Recommendations Based on Spending
         st.markdown("## Smart Financial Recommendations")
         recs = []
-        if rent > (0.3 * income):
+        if rent > (0.3 * salary):
             recs.append("📌 Consider reducing rent or finding a more affordable option (should ideally be <30% of income).")
-        if groceries > (0.2 * income):
+        if groceries > (0.2 * salary):
             recs.append("📌 Look for discounts, meal planning, or alternative grocery options to cut costs.")
-        if utilities > (0.1 * income):
+        if utilities > (0.1 * salary):
             recs.append("📌 Try to save on electricity and water bills by using energy-efficient appliances.")
-        if transportation > (0.15 * income):
+        if transportation > (0.15 * salary):
             recs.append("📌 Consider carpooling or using public transport to cut transportation costs.")
-        if entertainment > (0.1 * income):
+        if entertainment > (0.1 * salary):
             recs.append("📌 Consider budgeting entertainment expenses to free up more savings.")
-        if other_expenses > (0.1 * income):
+        if other_expenses > (0.1 * salary):
             recs.append("📌 Review miscellaneous expenses to find potential savings opportunities.")
         if remaining_income > 0:
             recs.append("📌 Consider investing a portion of your remaining income for better financial growth.")
