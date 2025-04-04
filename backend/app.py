@@ -12,6 +12,11 @@ from hra_calculator import calculate_hra
 from loan_utils import calculate_emi
 from transaction_analyzer import analyze_transactions
 import pandas as pd
+import requests
+import os
+import json
+from datetime import datetime, timedelta
+
 
 
 app = Flask(__name__)
@@ -27,6 +32,54 @@ def upload_transactions():
     result_json = summary_table.reset_index().to_dict(orient="records")
 
     return jsonify({"summary": result_json})
+
+# Real time news
+CACHE_FILE = "tax_news_cache.json"
+
+@app.route("/tax_news", methods=["GET"])
+def fetch_tax_news():
+    try:
+        # Check if cache exists
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, "r") as f:
+                cache_data = json.load(f)
+                last_fetched = datetime.strptime(cache_data["timestamp"], "%Y-%m-%d %H:%M:%S")
+                if datetime.utcnow() - last_fetched < timedelta(days=2):
+                    return jsonify({"news": cache_data["news"]})
+
+        # Fetch from API if 2 days passed or cache doesn't exist
+        response = requests.get("https://newsdata.io/api/1/news?apikey=pub_78245db189fba9e583135531ddbcf8185efce&q=tax&country=in&language=en&category=business,domestic,education,health,lifestyle")
+        data = response.json()
+
+        if "results" not in data or not data["results"]:
+            print("API Response had no results:", data)
+            return jsonify({"news": [], "message": "No tax news found."})
+
+        news_list = []
+        for item in data["results"][:5]:
+            raw_date = item.get("pubDate", "")
+            try:
+                dt = datetime.strptime(raw_date, "%Y-%m-%d %H:%M:%S")
+                formatted_date = dt.strftime("%d %b %Y\n%I:%M:%S %p")
+            except:
+                formatted_date = raw_date
+
+            news_list.append({
+                "DESCRIPTION": f"{item.get('title', 'No Title')}: {item.get('description', 'No Description')}", "DATE(GMT)": formatted_date, "PUBLISHER": item.get("source_id", "Unknown Source")
+            })
+
+        # Cache the response
+        with open(CACHE_FILE, "w") as f:
+            json.dump({
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                "news": news_list
+            }, f)
+
+        return jsonify({"news": news_list})
+
+    except Exception as e:
+        print("Error while fetching news:", str(e))
+        return jsonify({"error": "Failed to fetch news. Please try again later."}), 500
 
 
 # API Endpoint: Predict tax deductions
