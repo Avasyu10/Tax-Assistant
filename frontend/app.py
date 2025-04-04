@@ -53,6 +53,21 @@ elif st.session_state.mode == "loan_calculator":
 st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
+st.markdown("## 📰 Tax News Updates")
+
+response = requests.get(f"{BASE_URL}/tax_news")
+
+if response.status_code == 200:
+    news_data = response.json().get("news", [])
+    if news_data:
+        df_news = pd.DataFrame(news_data)
+        st.dataframe(df_news)
+    else:
+        st.info("No tax news found.")
+else:
+    st.error("Failed to fetch news. Please try again later.")
+st.markdown("---")
+
 
 # Mode Switching Buttons
 col1, col2, col3, col4 = st.columns(4)
