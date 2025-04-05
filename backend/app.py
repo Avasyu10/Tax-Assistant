@@ -13,7 +13,9 @@ from loan_utils import calculate_emi
 from transaction_analyzer import analyze_transactions
 import pandas as pd
 import requests
-from datetime import datetime
+import json
+import os
+from datetime import datetime,timedelta,timezone
 
 app = Flask(__name__)
 
@@ -30,10 +32,24 @@ def upload_transactions():
     return jsonify({"summary": result_json})
 
 
+CACHE_FILE = "tax_news_cache.json"
+
 @app.route("/tax_news", methods=["GET"])
 def fetch_tax_news():
     try:
-        response = requests.get("https://newsdata.io/api/1/news?apikey=pub_78245db189fba9e583135531ddbcf8185efce&q=tax%20AND%20taxes&country=in&language=en&category=business,domestic,health,lifestyle")
+        
+        if os.path.exists(CACHE_FILE):
+            with open(CACHE_FILE, "r") as f:
+                cache_data = json.load(f)
+                last_fetched = datetime.strptime(cache_data["timestamp"], "%Y-%m-%d %H:%M:%S")
+                last_fetched = last_fetched.replace(tzinfo=timezone.utc)
+                if datetime.now(timezone.utc) - last_fetched < timedelta(hours=1):
+                    return jsonify({"news": cache_data["news"]})
+
+        # Fetch from API if cache is expired or missing
+        response = requests.get(
+            "https://newsdata.io/api/1/news?apikey=pub_78245db189fba9e583135531ddbcf8185efce&q=tax%20AND%20taxes&country=in&language=en&category=business,domestic,health,lifestyle"
+        )
         data = response.json()
 
         if "results" not in data or not data["results"]:
@@ -55,12 +71,18 @@ def fetch_tax_news():
                 "PUBLISHER": item.get("source_id", "Unknown Source")
             })
 
+        # Save response to cache
+        with open(CACHE_FILE, "w") as f:
+            json.dump({
+                "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+                "news": news_list
+            }, f)
+
         return jsonify({"news": news_list})
 
     except Exception as e:
-        print("Error while fetching news:", str(e))  # ✅ Print actual error
+        print("Error while fetching news:", str(e))
         return jsonify({"error": "Failed to fetch news. Please try again later."}), 500
-
 
 # API Endpoint: Predict tax deductions
 @app.route("/predict_deduction", methods=["POST"])
