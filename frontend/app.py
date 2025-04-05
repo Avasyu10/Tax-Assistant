@@ -53,19 +53,24 @@ elif st.session_state.mode == "loan_calculator":
 st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
-st.markdown("## 📰 Tax News Updates")
+st.markdown("## 📰 **Latest Tax News Updates**")
 
 response = requests.get(f"{BASE_URL}/tax_news")
 
 if response.status_code == 200:
     news_data = response.json().get("news", [])
     if news_data:
-        df_news = pd.DataFrame(news_data)
-        st.dataframe(df_news)
+        for news in news_data:
+            title = news["DESCRIPTION"].split(":")[0]
+            body = news["DESCRIPTION"].split(":", 1)[-1]
+            with st.expander(f" {title}"):
+                st.markdown(f"**📝 Description:** {body}")
+                st.markdown(f"📅 **Date (GMT):** {news['DATE(GMT)']}")
+                st.markdown(f"🏢 **Publisher:** {news['PUBLISHER']}")
     else:
-        st.info("No tax news found.")
+        st.info("🚫 No tax news found at the moment.")
 else:
-    st.error("Failed to fetch news. Please try again later.")
+    st.error("⚠️ Failed to fetch tax news. Please try again later.")
 st.markdown("---")
 
 
