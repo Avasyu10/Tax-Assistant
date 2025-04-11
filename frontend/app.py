@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import tempfile
+import sounddevice as sd
 import speech_recognition as sr
 from gtts import gTTS
 
@@ -456,19 +457,24 @@ with col2:
 st.markdown("---")
 
 
-# AI Tax Chatbot
-
 st.markdown("## 🤖 Voice-Enabled AI Tax Chatbot")
 
 
 if "question_from_voice" not in st.session_state:
     st.session_state.question_from_voice = ""
 
+
+def record_audio(duration=5, samplerate=44100):
+    st.info("🎙️ Listening... Speak now!")
+    audio_data = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='int16')
+    sd.wait()
+    return np.array(audio_data, dtype='int16').flatten()
+
+
 if st.button("Speak your question 🎙️"):
     recognizer = sr.Recognizer()
-    with sr.Microphone() as source:
-        st.info("Listening... Speak now!")
-        audio = recognizer.listen(source)
+    audio_array = record_audio()
+    audio = sr.AudioData(audio_array.tobytes(), 44100, 2)
 
     try:
         spoken_question = recognizer.recognize_google(audio)
@@ -488,11 +494,10 @@ if st.button("💬 Get Advice") and question.strip():
     answer = response.json()["answer"]
     st.success(f"Chatbot: {answer}")
 
-
+ 
     tts = gTTS(answer)
     temp_audio = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
     tts.save(temp_audio.name)
-
     st.audio(temp_audio.name, format="audio/mp3")
 
 st.markdown("---")
