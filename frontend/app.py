@@ -3,6 +3,9 @@ import requests
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import tempfile
+import speech_recognition as sr
+from gtts import gTTS
 
 # Backend Base URL
 BASE_URL = "https://ai-tax-assistant.onrender.com"
@@ -454,11 +457,43 @@ st.markdown("---")
 
 
 # AI Tax Chatbot
-st.markdown("## 🤖 Ask the AI Tax Chatbot")
-question = st.text_input("Enter your tax-related question:")
-if st.button("💬 Get Advice"):
+
+st.markdown("## 🤖 Voice-Enabled AI Tax Chatbot")
+
+
+if "question_from_voice" not in st.session_state:
+    st.session_state.question_from_voice = ""
+
+if st.button("Speak your question 🎙️"):
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.info("Listening... Speak now!")
+        audio = recognizer.listen(source)
+
+    try:
+        spoken_question = recognizer.recognize_google(audio)
+        st.session_state.question_from_voice = spoken_question
+        st.success(f"You said: {spoken_question}")
+    except sr.UnknownValueError:
+        st.warning("Sorry, could not understand the audio.")
+    except sr.RequestError as e:
+        st.error(f"Could not request results; {e}")
+
+
+question = st.text_input("Ask your tax question:", value=st.session_state.question_from_voice)
+
+
+if st.button("💬 Get Advice") and question.strip():
     response = requests.post(f"{BASE_URL}/chatbot", json={"question": question})
-    st.info(f"### Chatbot Response: {response.json()['answer']}")
+    answer = response.json()["answer"]
+    st.success(f"Chatbot: {answer}")
+
+
+    tts = gTTS(answer)
+    temp_audio = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tts.save(temp_audio.name)
+
+    st.audio(temp_audio.name, format="audio/mp3")
 
 st.markdown("---")
 
