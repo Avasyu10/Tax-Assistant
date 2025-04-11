@@ -3,4 +3,4 @@ numpy
 pandas
 SpeechRecognition
 gTTS
-streamlit-audio-recorder
+
