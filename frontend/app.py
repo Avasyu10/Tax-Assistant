@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import tempfile
-from streamlit_audio_recorder import audio_recorder
 import speech_recognition as sr
 from gtts import gTTS
 
@@ -457,44 +456,49 @@ with col2:
 st.markdown("---")
 
 
+
 st.markdown("## 🤖 Voice-Enabled AI Tax Chatbot")
+
 
 if "question_from_voice" not in st.session_state:
     st.session_state.question_from_voice = ""
 
 
-audio_bytes = audio_recorder(text="🎤 Click to Record", recording_color="#e53935", neutral_color="#6c757d", icon_size="2x")
+audio_file = st.audio_input("Speak your question 🎙️", type=["audio/wav"])
 
-if audio_bytes:
+
+if audio_file is not None:
     recognizer = sr.Recognizer()
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as f:
-        f.write(audio_bytes)
-        f.flush()
-        with sr.AudioFile(f.name) as source:
-            audio = recognizer.record(source)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
+        temp_audio.write(audio_file.read())
+        temp_audio.flush()
+
+        with sr.AudioFile(temp_audio.name) as source:
+            audio_data = recognizer.record(source)
 
         try:
-            spoken_question = recognizer.recognize_google(audio)
-            st.session_state.question_from_voice = spoken_question
-            st.success(f"You said: {spoken_question}")
+            spoken_text = recognizer.recognize_google(audio_data)
+            st.session_state.question_from_voice = spoken_text
+            st.success(f"You said: {spoken_text}")
         except sr.UnknownValueError:
-            st.warning("Sorry, could not understand the audio.")
+            st.warning("Sorry, I couldn’t understand the audio.")
         except sr.RequestError as e:
-            st.error(f"Could not request results; {e}")
+            st.error(f"Speech recognition error: {e}")
 
 
-question = st.text_input("Ask your tax question:", value=st.session_state.question_from_voice)
+question = st.text_input("Or type your tax question:", value=st.session_state.question_from_voice)
 
 
 if st.button("💬 Get Advice") and question.strip():
     response = requests.post(f"{BASE_URL}/chatbot", json={"question": question})
-    answer = response.json()["answer"]
+    answer = response.json().get("answer", "No response received.")
     st.success(f"Chatbot: {answer}")
 
+    # 🔊 Text-to-speech playback
     tts = gTTS(answer)
-    temp_audio = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
-    tts.save(temp_audio.name)
-    st.audio(temp_audio.name, format="audio/mp3")
+    temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+    tts.save(temp_audio_file.name)
+    st.audio(temp_audio_file.name, format="audio/mp3")
 
 st.markdown("---")
 
