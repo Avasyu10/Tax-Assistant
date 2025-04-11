@@ -459,14 +459,13 @@ st.markdown("---")
 
 st.markdown("## 🤖 Voice-Enabled AI Tax Chatbot")
 
-
 if "question_from_voice" not in st.session_state:
     st.session_state.question_from_voice = ""
 
+# 🎙️ Audio input (removed type parameter)
+audio_file = st.audio_input("Speak your question 🎙️")
 
-audio_file = st.audio_input("Speak your question 🎙️", type=["audio/wav"])
-
-
+# Handle speech recognition if audio is received
 if audio_file is not None:
     recognizer = sr.Recognizer()
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
@@ -485,21 +484,20 @@ if audio_file is not None:
         except sr.RequestError as e:
             st.error(f"Speech recognition error: {e}")
 
-
+# Input box for manual question
 question = st.text_input("Or type your tax question:", value=st.session_state.question_from_voice)
 
-
+# Chatbot response
 if st.button("💬 Get Advice") and question.strip():
     response = requests.post(f"{BASE_URL}/chatbot", json={"question": question})
     answer = response.json().get("answer", "No response received.")
     st.success(f"Chatbot: {answer}")
 
-    # 🔊 Text-to-speech playback
+    # 🔊 Text-to-speech
     tts = gTTS(answer)
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
     tts.save(temp_audio_file.name)
     st.audio(temp_audio_file.name, format="audio/mp3")
-
 st.markdown("---")
 
 
