@@ -7,18 +7,16 @@ import tempfile
 import speech_recognition as sr
 from gtts import gTTS
 
-# Backend Base URL
+
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
-
-# Sidebar: Dynamic Input Fields
 st.sidebar.header("📑 Enter Your Financial Details")
 
-# Define session state for mode switching
+
 if "mode" not in st.session_state:
     st.session_state.mode = "general_tax"
 
-# Sidebar Inputs (Default: General Tax Inputs)
+
 if st.session_state.mode == "general_tax":
     income = st.sidebar.number_input("Income", min_value=0, step=1000)
     investments = st.sidebar.number_input("Investments (PPF, ELSS, NPS, etc.)", min_value=0, step=1000)
@@ -28,7 +26,6 @@ if st.session_state.mode == "general_tax":
 elif st.session_state.mode == "capital_gains":
     num_trades = st.sidebar.number_input("Number of Trades", min_value=1, step=1, value=1)
 
-    # Initialize variables
     total_short_term_stocks = 0
     total_long_term_stocks = 0
     total_crypto_gains = 0
@@ -100,7 +97,6 @@ with col4:
         st.session_state.mode = "loan_calculator"
         st.rerun()
 
-# HRA Calculation Section
 
 # Loan EMI Calculation
 if st.session_state.mode == "loan_calculator":
@@ -156,6 +152,7 @@ if st.session_state.mode == "loan_calculator":
             st.pyplot(fig)
 
 st.markdown("---")
+# HRA Calculation Section
 
 if st.session_state.mode == "hra_calculator":
     
@@ -268,14 +265,12 @@ st.markdown("---")
 
 st.markdown("## ⚖️ Income & Expense Balance")
 
-# Button to enable expense entry
 if "enter_expenses" not in st.session_state:
     st.session_state.enter_expenses = False
 
 if st.button("➕ Enter Expenses"):
     st.session_state.enter_expenses = True
 
-# Expense entry fields (visible after button click)
 if st.session_state.enter_expenses:
     st.markdown("### 📌 Enter Your Expenses")
     st.markdown("Enter salary and your expenses below.")
@@ -292,7 +287,7 @@ if st.session_state.enter_expenses:
     total_expenses = rent + groceries + utilities + transportation + entertainment + other_expenses
     remaining_income = salary - total_expenses
 
-    # Button to finalize and show results
+    
     if st.button("📊 Split & Analyze"):
         st.success(f"### Total Expenses: ₹{total_expenses}")
         st.info(f"### Remaining Income: ₹{remaining_income}")
@@ -300,7 +295,7 @@ if st.session_state.enter_expenses:
         if remaining_income < 0:
             st.error("⚠️ Warning: Expenses exceed income! Consider adjusting your budget.")
 
-        # Pie Chart Visualization
+        
         st.markdown("## 📊 Expense Breakdown")
         labels = ["Rent", "Groceries", "Utilities", "Transportation", "Entertainment", "Other"]
         values = [rent, groceries, utilities, transportation, entertainment, other_expenses]
@@ -347,13 +342,11 @@ uploaded_statement = st.file_uploader("📂 Upload UPI Transaction CSV", type=["
 if uploaded_statement:
     st.success("✅ File Uploaded Successfully!")
 
-    # Read CSV as DataFrame
+    
     df = pd.read_csv(uploaded_statement)
 
-    # Convert DataFrame to JSON format for API
     transactions_json = df.to_dict(orient="records")
 
-    # Send data to backend API for processing
     response = requests.post(f"{BASE_URL}/upload_transactions", json={"transactions": transactions_json})
 
     if response.status_code == 200:
@@ -416,6 +409,7 @@ st.markdown(
 )
 
 st.markdown("---")
+
 # Tax Resources & Guides Section
 st.markdown("## 🌐 Important Tax Resources & Guides")
 st.markdown("Here are some essential links to help you understand and file your taxes effectively:")
@@ -462,10 +456,10 @@ st.markdown("## 🤖 Voice-Enabled AI Tax Chatbot")
 if "question_from_voice" not in st.session_state:
     st.session_state.question_from_voice = ""
 
-# 🎙️ Audio input (removed type parameter)
+
 audio_file = st.audio_input("Speak your question 🎙️")
 
-# Handle speech recognition if audio is received
+
 if audio_file is not None:
     recognizer = sr.Recognizer()
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
@@ -484,16 +478,16 @@ if audio_file is not None:
         except sr.RequestError as e:
             st.error(f"Speech recognition error: {e}")
 
-# Input box for manual question
-question = st.text_input("Or type your tax question:", value=st.session_state.question_from_voice)
 
-# Chatbot response
+question = st.text_input("Or type your tax related question:", value=st.session_state.question_from_voice)
+
+
 if st.button("💬 Get Advice") and question.strip():
     response = requests.post(f"{BASE_URL}/chatbot", json={"question": question})
     answer = response.json().get("answer", "No response received.")
     st.success(f"Chatbot: {answer}")
 
-    # 🔊 Text-to-speech
+    
     tts = gTTS(answer)
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
     tts.save(temp_audio_file.name)
