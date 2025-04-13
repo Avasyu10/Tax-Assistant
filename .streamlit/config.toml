@@ -2,5 +2,4 @@
 base="light"
 primaryColor="#ff3636"
 textColor="#1a1a27"
-[ui]
-wideMode = true
+
