@@ -53,6 +53,8 @@ elif st.session_state.mode == "loan_calculator":
 st.title("💼 Smart Tax Assistant")
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
+
+
 st.markdown("## 📰 **Latest Tax News Updates**")
 
 response = requests.get(f"{BASE_URL}/tax_news")
@@ -60,19 +62,65 @@ response = requests.get(f"{BASE_URL}/tax_news")
 if response.status_code == 200:
     news_data = response.json().get("news", [])
     if news_data:
-        for news in news_data:
-            title = news["DESCRIPTION"].split(":")[0]
-            body = news["DESCRIPTION"].split(":", 1)[-1]
-            with st.expander(f" {title}"):
-                st.markdown(f"**📝 Description:** {body}")
-                st.markdown(f"📅 **Date (GMT):** {news['DATE(GMT)']}")
-                st.markdown(f"🏢 **Publisher:** {news['PUBLISHER']}")
+        # Custom CSS for scroll inside cards
+        st.markdown("""
+            <style>
+                .news-card {
+                    background-color: #f0f2f6;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+                    height: 300px;
+                    overflow-y: auto;
+                }
+
+                .news-card h4 {
+                    margin-top: 0;
+                    font-size: 16px;
+                    color: #333333;
+                }
+
+                .news-card p {
+                    font-size: 14px;
+                    color: #555555;
+                    margin-bottom: 10px;
+                }
+
+                .news-card small {
+                    font-size: 12px;
+                    color: #777777;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
+        num_per_row = 3
+        for i in range(0, len(news_data), num_per_row):
+            cols = st.columns(num_per_row)
+            for j, news in enumerate(news_data[i:i+num_per_row]):
+                title = news["DESCRIPTION"].split(":")[0]
+                body = news["DESCRIPTION"].split(":", 1)[-1]
+                date = news["DATE(GMT)"]
+                publisher = news["PUBLISHER"]
+
+                with cols[j]:
+                    st.markdown(
+                        f"""
+                        <div class="news-card">
+                            <h4> {title}</h4>
+                            <p>{body}</p>
+                            <small>📅 <b>Date (GMT):</b> {date}<br>
+                            🏢 <b>Publisher:</b> {publisher}</small>
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
     else:
         st.info("🚫 No tax news found at the moment.")
 else:
     st.error("⚠️ Failed to fetch tax news. Please try again later.")
-st.markdown("---")
 
+
+st.markdown("---")
 
 # Mode Switching Buttons
 col1, col2, col3, col4 = st.columns(4)
