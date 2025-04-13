@@ -7,6 +7,7 @@ import tempfile
 import speech_recognition as sr
 from gtts import gTTS
 
+st.set_page_config(layout="wide")
 
 BASE_URL = "https://ai-tax-assistant.onrender.com"
 
