@@ -116,6 +116,8 @@ if response.status_code == 200:
                         """,
                         unsafe_allow_html=True
                     )
+              if i == 0:
+                  st.markdown("\n\n")
     else:
         st.info("🚫 No tax news found at the moment.")
 else:
