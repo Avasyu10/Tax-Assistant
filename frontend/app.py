@@ -544,7 +544,7 @@ if st.button("💬 Get Advice") and question.strip():
     temp_audio_file = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
     tts.save(temp_audio_file.name)
     st.audio(temp_audio_file.name, format="audio/mp3")
-st.markdown("---")
+
 
 
 
