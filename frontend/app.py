@@ -493,7 +493,9 @@ with col2:
     st.markdown("- **How to File Income Tax Returns:** [Read Here](https://cleartax.in/s/how-to-efile-itr)")
     st.markdown("- **Documents Required for Filing Taxes:** [View Here](https://cleartax.in/s/documents-required-for-income-tax-return-filing)")
     st.markdown("\n")
-    
+    st.markdown("\n")
+    st.markdown("\n")
+    st.markdown("\n")
     
     st.markdown("### 📌 Investment & Tax Saving")
     st.markdown("- **80C Deductions Explained:** [Learn More](https://cleartax.in/s/80c-80-deductions)")
