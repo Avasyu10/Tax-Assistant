@@ -57,7 +57,7 @@ def fetch_tax_news():
             return jsonify({"news": [], "message": "No tax news found."})
 
         news_list = []
-        for item in data["results"][:5]:
+        for item in data["results"][:6]:
             raw_date = item.get("pubDate", "")
             try:
                 dt = datetime.strptime(raw_date, "%Y-%m-%d %H:%M:%S")
