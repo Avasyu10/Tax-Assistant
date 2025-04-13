@@ -50,7 +50,9 @@ elif st.session_state.mode == "loan_calculator":
 
         
 # Title
-st.title("💼 Smart Tax Assistant")
+st.markdown("""
+<h1 style='color:#D4AF37;'>💼 Smart Tax Assistant</h1>
+""", unsafe_allow_html=True)
 st.markdown("### Simplify Your Tax Calculation & Deductions")
 st.markdown("---")
 
