@@ -3,8 +3,10 @@
 📌 Project Title
 Smart Tax Assistant: An AI-Powered Web Tool for Financial and Tax Guidance
 
+
 🔍 Objective
 To develop a web-based tax assistant that helps users manage their personal finances by offering intelligent tax predictions, audit risk assessments, capital gains calculations, investment suggestions, and real-time news related to taxation. The platform provides a seamless interface where users can upload their financial data and interact with AI to get tax-related guidance.
+
 
 🛠️ Technology Stack
 Frontend: Streamlit (Python-based interactive UI)
@@ -20,6 +22,7 @@ APIs:
 NewsData.io (for real-time tax-related news)
 
 Custom endpoints for tax calculation & suggestions
+
 
 📁 Backend Modules & API Endpoints
 1. /upload_transactions
@@ -99,6 +102,7 @@ Functionality: Returns a breakdown of tax along with investment recommendations
 
 Output: Breakdown and suggested savings
 
+
 🧠 AI Functionalities
 Deduction Prediction Model: Based on past user behavior and income patterns
 
@@ -107,6 +111,7 @@ Audit Risk Estimation: Trained on financial red flags that trigger audits
 Investment Advisor: Suggests PPF, ELSS, NPS, etc. based on user's current portfolio
 
 Chatbot: Powered by LLM (e.g., Qwen), handles general tax FAQs
+
 
 🎯 Key Features
 Upload and analyze bank transactions
@@ -127,12 +132,14 @@ Real-time tax news (6 latest)
 
 AI-powered tax chatbot
 
+
 📈 Potential Impact
 For Individuals: Simplifies tax planning and improves financial literacy
 
 For Businesses: Helps freelancers, contractors, and small businesses manage taxes efficiently
 
 For Financial Advisors: Provides a digital assistant to support client interactions
+
 
 📎 Future Enhancements
 Integrate UPI-based expense tracking
@@ -146,6 +153,7 @@ Use OCR for physical receipt scanning
 Add authentication and user accounts
 
 Visual tax breakdown graphs in frontend
+
 
 👨‍💻 Deployment
 Backend Server: Flask (deployed on Render or local)
