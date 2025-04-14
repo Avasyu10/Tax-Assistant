@@ -1,83 +1,100 @@
-💼 Smart Tax Assistant
-An AI-Powered Web Tool for Financial and Tax Guidance
+# 💼 Smart Tax Assistant
 
-🔍 Objective 
-To develop a web-based tax assistant that helps users manage their personal finances by offering intelligent tax predictions, audit risk assessments, capital gains calculations, investment suggestions, and real-time news related to taxation. The platform provides a seamless interface where users can upload their financial data and interact with AI to get tax-related guidance.
+An **AI-Powered Web Tool** for Financial and Tax Guidance
 
-🛠️ Technology Stack Frontend: Streamlit (Python-based interactive UI)
-Backend: Flask (Python)
-Libraries: pandas, requests, json, datetime, matplotlib.pyplot, speech_recognition, gtts, streamlit, os
-AI/ML Models: Used for deduction prediction, audit risk, and investment advice (can use pre-trained models or rule-based systems)
-APIs:
-NewsData.io (for real-time tax-related news)
-Custom endpoints for tax calculation & suggestions
+---
 
-📁 Backend Modules & API Endpoints
-1.	/upload_transactions Input: JSON of bank transactions
-Functionality: Parses CSV and summarizes spending
-Output: Category-wise summary of transactions
-2.	/tax_news Input: GET request
-Functionality: Fetches latest 6 tax-related news articles from NewsData.io (cached for 1 hour)
-Output: JSON containing title, description, date, and publisher
-3.	/predict_deduction Input: User financial details (income, investments, dependents, etc.)
-Functionality: Predicts eligible tax deductions using AI
-Output: Estimated deductions
-4.	/calculate_tax Input: Annual income
-Functionality: Calculates estimated tax as per slabs
-Output: Tax amount
-5.	/predict_audit_risk Input: Income and deductions
-Functionality: Predicts audit risk (High/Low) based on financial behavior
-Output: Risk label
-6.	/chatbot Input: Natural language question
-Functionality: Returns tax-related answers using NLP model (e.g., Hugging Face's Qwen)
-Output: Text answer
-7.	/generate_checklist Input: Employment type and financial profile
-Functionality: Generates a list of documents needed for filing tax
-Output: Checklist
-8.	/calculate_capital_gains Input: Asset details (buy/sell price, quantity, holding period)
-Functionality: Computes capital gains and tax liability
-Output: Capital gain/loss and tax owed
-9.	/calculate_hra Input: Salary, rent paid, HRA received, metro flag
-Functionality: Computes HRA exemption as per income tax rules
-Output: HRA exemption value
-10.	/calculate_loan Input: Loan amount, rate, tenure
-Functionality: Calculates monthly EMI
-Output: EMI value
-11.	/tax_breakdown Input: Income and financial details
-Functionality: Returns a breakdown of tax along with investment recommendations
-Output: Breakdown and suggested savings
+## 🔍 Objective
 
-🧠 AI Functionalities 
-Deduction Prediction Model: Based on past user behavior and income patterns
-Audit Risk Estimation: Trained on financial red flags that trigger audits
-Investment Advisor: Suggests PPF, ELSS, NPS, etc. based on user's current portfolio
-Chatbot: Powered by LLM (e.g., Qwen), handles general tax FAQs
+To develop a web-based tax assistant that helps users manage their personal finances by offering:
 
-🎯 Key Features 
-Upload and analyze bank transactions
-Get estimated tax deductions
-Calculate tax liability and EMI
-Understand capital gains implications
-Receive personalized investment advice
-Predict audit risk
-Generate a tax-filing document checklist
-Real-time tax news 
-AI-powered tax chatbot
+- ✅ Intelligent tax predictions  
+- ✅ Audit risk assessments  
+- ✅ Capital gains calculations  
+- ✅ Investment suggestions  
+- ✅ Real-time tax news updates  
 
-📈 Potential Impact 
-For Individuals: Simplifies tax planning and improves financial literacy
-For Businesses: Helps freelancers, contractors, and small businesses manage taxes efficiently
-For Financial Advisors: Provides a digital assistant to support client interactions
+Users can upload their financial data, interact with AI, and receive actionable insights for taxation.
 
-📎 Future Enhancements 
-Integrate UPI-based expense tracking
-Add PDF bank statement parsing
-Expand chatbot to support regional languages
-Use OCR for physical receipt scanning
-Add authentication and user accounts
-Visual tax breakdown graphs in frontend
+---
 
-👨‍💻 Deployment
- Backend Server: Flask (deployed on Render or local)
-Frontend: Streamlit with wide layout enabled
-API Usage: Secure API keys and add rate limits if deployed publicly
+## 🛠️ Technology Stack
+
+- **Frontend**: Streamlit (Python-based UI)  
+- **Backend**: Flask (Python)  
+- **Libraries**: `pandas`, `requests`, `json`, `datetime`, `matplotlib.pyplot`, `speech_recognition`, `gtts`, `streamlit`, `os`  
+- **AI/ML Models**: Used for deduction prediction, audit risk estimation, and investment advice  
+- **APIs**:  
+  - [NewsData.io](https://newsdata.io) for real-time news  
+  - Custom REST APIs for tax functionalities  
+
+---
+
+## 📁 Backend Modules & API Endpoints
+
+| Endpoint | Description |
+|---------|-------------|
+| `/upload_transactions` | Upload and parse CSV bank transactions |
+| `/tax_news` | Fetch 6 recent tax news articles (cached hourly) |
+| `/predict_deduction` | Estimate tax deductions based on income/investments |
+| `/calculate_tax` | Calculate estimated tax liability |
+| `/predict_audit_risk` | Predict risk of being audited |
+| `/chatbot` | NLP-powered chatbot for tax Q&A |
+| `/generate_checklist` | Generate a document checklist based on user profile |
+| `/calculate_capital_gains` | Compute capital gains/losses and tax |
+| `/calculate_hra` | Calculate HRA exemptions |
+| `/calculate_loan` | Estimate loan EMI |
+| `/tax_breakdown` | Returns tax breakdown and investment suggestions |
+
+---
+
+## 🧠 AI Functionalities
+
+- **Deduction Prediction Model**: Trained on income and investment trends  
+- **Audit Risk Estimation**: Flags suspicious deduction-to-income ratios  
+- **Investment Advisor**: Recommends ELSS, PPF, NPS based on goals  
+- **Chatbot**: Hugging Face-based LLM (Qwen) that answers tax questions  
+
+---
+
+## 🎯 Key Features
+
+- 📁 Upload and analyze bank statements  
+- 📊 Get real-time deduction predictions  
+- 💰 Estimate taxes, capital gains, HRA and loan EMI  
+- 📈 Personalized investment advice  
+- ⚠️ Predict audit risk levels  
+- 📄 Generate tax-filing checklists  
+- 📰 Real-time tax news every hour  
+- 🤖 Voice-enabled AI chatbot for tax FAQs  
+
+---
+
+## 📈 Potential Impact
+
+- **Individuals**: Educates and empowers them to plan taxes smarter  
+- **Freelancers/SMBs**: Eases tax filing and compliance  
+- **Financial Advisors**: Acts as a smart backend for client help  
+
+---
+
+## 📎 Future Enhancements
+
+- 🔗 UPI-based transaction tracking  
+- 📑 PDF parsing of bank statements  
+- 🧾 OCR for scanning physical receipts  
+- 🔐 User authentication & history tracking  
+- 🌐 Regional language chatbot support  
+- 📊 More visual dashboards and graphs  
+
+---
+
+## 👨‍💻 Deployment
+
+- **Backend**: Flask (hosted on Render or localhost)  
+- **Frontend**: Streamlit (wide layout enabled)  
+- **News API**: Cached every 1 hour using NewsData.io  
+- **Speech**: Uses `gTTS` for response and `streamlit audio recorder` for input  
+
+---
+
