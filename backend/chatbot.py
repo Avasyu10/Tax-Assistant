@@ -12,7 +12,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Initialize the Gemini model
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
 
 def get_tax_advice(question):
     """Fetch tax advice using Gemini's Gemini-Pro model."""
