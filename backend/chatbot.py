@@ -1,36 +1,29 @@
-from huggingface_hub import InferenceClient
-
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get the token
-HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_TOKEN")
+# Get the Gemini API key
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Initialize the client
-client = InferenceClient(
-    provider="sambanova",
-    api_key=HUGGING_FACE_API_KEY,
-)
+# Configure the Gemini client
+genai.configure(api_key=GEMINI_API_KEY)
+
+# Initialize the Gemini model
+model = genai.GenerativeModel("gemini-pro")
 
 def get_tax_advice(question):
-    """Fetch tax advice using Hugging Face's Qwen/QwQ-32B model."""
+    """Fetch tax advice using Gemini's Gemini-Pro model."""
     try:
-        completion = client.chat.completions.create(
-            model="Qwen/QwQ-32B",  # Change the model if needed
-            messages=[
-                {"role": "system", "content": "You are a tax advisor."},
-                {"role": "user", "content": question}
-            ],
-            max_tokens=500,
+        response = model.generate_content(
+            f"You are a tax advisor.\nUser: {question}"
         )
 
-        return completion.choices[0].message.content if completion.choices else "No response received."
+        return response.text.strip() if response.text else "No response received."
 
     except Exception as e:
         return f"Error: {e}"
 
-# Example usage:
-# print(get_tax_advice("What tax deductions are available for salaried employees?"))
+
