@@ -23,3 +23,5 @@ nltk
 
 # Web Requests (if needed for external API calls)
 requests
+
+google-generativeai
